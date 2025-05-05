@@ -28,6 +28,7 @@ import de.rwth.idsg.steve.web.dto.ocpp.GetCompositeScheduleParams;
 import de.rwth.idsg.steve.web.dto.ocpp.GetConfigurationParams;
 import de.rwth.idsg.steve.web.dto.ocpp.SetChargingProfileParams;
 import de.rwth.idsg.steve.web.dto.ocpp.TriggerMessageParams;
+import de.rwth.idsg.steve.web.dto.ocpp.MyCustomOperationParams;
 import ocpp.cs._2015._10.RegistrationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,6 +66,7 @@ public class Ocpp16Controller extends Ocpp15Controller {
     private static final String CLEAR_CHARGING_PATH = "/ClearChargingProfile";
     private static final String SET_CHARGING_PATH = "/SetChargingProfile";
     private static final String TRIGGER_MESSAGE_PATH = "/TriggerMessage";
+    private static final String MY_CUSTOM_PATH = "/MyCustomOperation";
 
     // -------------------------------------------------------------------------
     // Helpers
@@ -177,6 +179,13 @@ public class Ocpp16Controller extends Ocpp15Controller {
         return getPrefix() + TRIGGER_MESSAGE_PATH;
     }
 
+    @RequestMapping(value = MY_CUSTOM_PATH, method = RequestMethod.GET)
+    public String getMyCustom(Model model) {
+        setCommonAttributes(model);
+        model.addAttribute(PARAMS, new MyCustomOperationParams());
+        return getPrefix() + MY_CUSTOM_PATH;
+    }
+
     // -------------------------------------------------------------------------
     // Http methods (POST)
     // -------------------------------------------------------------------------
@@ -220,4 +229,11 @@ public class Ocpp16Controller extends Ocpp15Controller {
         }
         return REDIRECT_TASKS_PATH + chargePointServiceClient.getCompositeSchedule(params);
     }
+
+    @RequestMapping(value = MY_CUSTOM_PATH, method = RequestMethod.POST)
+    public String postMyCustom(@ModelAttribute(PARAMS) MyCustomOperationParams params, Model model) {
+        model.addAttribute("message", "Formular wurde gesendet: " + params.getMyField());
+        return "tasks";
+    }
+
 }

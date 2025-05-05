@@ -97,4 +97,15 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(k -> k.anyRequest().authenticated())
             .build();
     }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain elekeyFilterChain(HttpSecurity http, ApiAuthenticationManager apiAuthenticationManager) throws Exception {
+        return http.securityMatcher( "/elekey/**")
+                .csrf(k -> k.disable())
+                .sessionManagement(k -> k.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(k -> k
+                        .anyRequest().permitAll())
+                .build();
+    }
 }

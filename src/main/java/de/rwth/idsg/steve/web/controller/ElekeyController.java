@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @Controller
-@RequestMapping(value = "/manager/operations/elekey")
+@RequestMapping(value = "/elekey")
 public class ElekeyController
 {
 

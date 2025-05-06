@@ -11,6 +11,7 @@ RUN curl -sfL https://github.com/powerman/dockerize/releases/download/"$DOCKERIZ
 
 EXPOSE 8180
 EXPOSE 8443
+EXPOSE 5005
 WORKDIR /code
 
 VOLUME ["/code"]
@@ -22,5 +23,5 @@ COPY . /code
 # Build and run steve, requires a db to be available on port 3306
 CMD dockerize -wait tcp://mariadb:3306 -timeout 60s && \
 	./mvnw clean package -Pdocker -Djdk.tls.client.protocols="TLSv1,TLSv1.1,TLSv1.2" && \
-	java -XX:MaxRAMPercentage=85 -jar target/steve.jar
+	java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005 -XX:MaxRAMPercentage=85 -jar target/steve.jar
 
